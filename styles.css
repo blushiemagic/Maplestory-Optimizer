@@ -1,0 +1,134 @@
+fieldset {
+    border-radius: 4px;
+    margin-bottom: 1em;
+}
+
+div, table {
+    margin-bottom: 1em;
+}
+
+textarea {
+    margin-bottom: 1em;
+    display: block;
+}
+
+.no-top-margin {
+    margin-top: 0 !important;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0 !important;
+}
+
+#unbuffed {
+    background-color: #f0ffff;
+}
+
+#familiars {
+    background-color: #fffff0;
+}
+
+#buffs {
+    background-color: #f0fff0;
+}
+
+#burst {
+    background-color: #fff0f0;
+}
+
+#skills {
+    background-color: #f7f0ff;
+}
+
+#gains {
+    background-color: #f0fff0;
+}
+
+#losses {
+    background-color: #fff0f0;
+}
+
+legend {
+    font-weight: bold;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex>* {
+    flex: 1 1 50%;
+}
+
+img {
+    vertical-align: middle;
+}
+
+.label {
+    font-weight: bold;
+}
+
+input.stat-input {
+    max-width: 100px;
+}
+
+input.damage-input {
+    max-width: 80px;
+}
+
+input.digit-input {
+    max-width: 32px;
+}
+
+input.name-input {
+    width: 200px;
+}
+
+td:first-child, th:first-child {
+    text-align: right;
+}
+
+.inline-item {
+    margin-right: 1em;
+}
+
+.inline-item input {
+    margin-bottom: 2px;
+}
+
+.custom-buff-contents, .skill-contents {
+    display: inline-block;
+    padding: 1em;
+    border: 1px solid #bbbbbb;
+}
+
+.custom-buff>*, .skill>* {
+    vertical-align: middle;
+}
+
+.buff-items {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#results {
+    border-collapse: collapse;
+}
+
+#results th, #results td {
+    padding: 0.5em;
+    border-right: 1px solid #bbbbbb;
+    border-bottom: 1px solid #bbbbbb;
+}
+
+#results tbody tr:nth-child(2n+1) {
+    background-color: #f0ffff;
+}
+
+.gain {
+    color: #008000;
+}
+
+.loss {
+    color: #800000;
+}

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<head>
+    <title>Maplestory Optimization Calculator</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="src.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Maplestory Optimization Calculator</h1>
+    </header>
+    <form id="form">
+        <div>
+            <div>
+                <button type="button" id="open-import" class="inline-item" onclick="openImport()">Import</button>
+                <button type="button" id="open-export" class="inline-item" onclick="openExport()">Export</button>
+            </div>
+            <div id="import" hidden>
+                <textarea id="import-field" rows="8" cols="128" aria-label="Import"></textarea>
+                <button type="button" id="import-button" class="inline-item" onclick="doImport()">Import</button>
+                <button type="button" id="cancel-import" class="inline-item" onclick="closeImport()">Cancel</button>
+            </div>
+            <div id="export" hidden>
+                <textarea id="export-field" rows="8" cols="128" aria-label="Export" oninput="fixExport(event)"></textarea>
+                <button type="button" id="copy-export" class="inline-item" onclick="copyExport()">Copy to Clipboard</button>
+                <button type="button" id="close-export" class="inline-item" onclick="closeExport()">Close Export</button>
+            </div>
+        </div>
+        <div>
+            <label for="class">Class:</label>
+            <select id="class">
+                <option value="str">STR + (DEX)</option>
+                <option value="dex">DEX + (STR)</option>
+                <option value="int">INT + (LUK)</option>
+                <option value="luk">LUK + (DEX)</option>
+                <option value="luk2">LUK + (DEX + STR)</option>
+                <option value="xenon">Xenon</option>
+                <option value="da" disabled>Demon Avenger</option>
+            </select>
+        </div>
+        <fieldset id="unbuffed">
+            <legend>Unbuffed</legend>
+            <strong>Make sure to turn off all buffs!</strong>
+            <h3 class="no-bottom-margin">Stat</h3>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>AP</th>
+                    <th>Base</th>
+                    <th>Percent</th>
+                    <th>Final</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <th class="inner-main">Main</th>
+                    <td><input type="number" id="stat-1-ap" class="stat-input aria-label-ap-main" aria-label="AP Main Stat" value="4" min="4"></td>
+                    <td><input type="number" id="stat-1-base" class="stat-input aria-label-base-main" aria-label="Base Main Stat" value="4" min="4"></td>
+                    <td><input type="number" id="stat-1-percent" class="stat-input aria-label-percent-main" aria-label="Percent Main Stat" value="0" min="0"></td>
+                    <td><input type="number" id="stat-1-final" class="stat-input aria-label-final-main" aria-label="Final Main Stat" value="0" min="0"></td>
+                    <th id="stat-1-total">4</th>
+                </tr>
+                <tr>
+                    <th class="inner-secondary">Secondary</th>
+                    <td><input type="number" id="stat-2-ap" class="stat-input aria-label-ap-secondary" aria-label="AP Secondary Stat" value="4" min="4"></td>
+                    <td><input type="number" id="stat-2-base" class="stat-input aria-label-base-secondary" aria-label="Base Secondary Stat" value="4" min="4"></td>
+                    <td><input type="number" id="stat-2-percent" class="stat-input aria-label-percent-secondary" aria-label="Percent Secondary Stat" value="0" min="0"></td>
+                    <td><input type="number" id="stat-2-final" class="stat-input aria-label-final-secondary" aria-label="Final Secondary Stat" value="0" min="0"></td>
+                    <th id="stat-2-total">4</th>
+                </tr>
+                <tr id="unbuffed-stat-3">
+                    <th class="inner-third">Third</th>
+                    <td><input type="number" id="stat-3-ap" class="stat-input aria-label-ap-third" aria-label="AP Third Stat" value="4" min="4" disabled></td>
+                    <td><input type="number" id="stat-3-base" class="stat-input aria-label-base-third" aria-label="Base Third Stat" value="4" min="4" disabled></td>
+                    <td><input type="number" id="stat-3-percent" class="stat-input aria-label-percent-third" aria-label="Percent Third Stat" value="0" min="0" disabled></td>
+                    <td><input type="number" id="stat-3-final" class="stat-input aria-label-final-third" aria-label="Final Third Stat" value="0" min="0" disabled></td>
+                    <th id="stat-3-total">0</th>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Base</th>
+                    <th>Percent</th>
+                    <th>Final</th>
+                    <th>Total</th>
+                </tr>
+                <tr>
+                    <th>Attack</th>
+                    <td><input type="number" id="attack-base" class="stat-input" aria-label="Base Attack" value="0" min="0"></td>
+                    <td><input type="number" id="attack-percent" class="stat-input" aria-label="Percent Attack" value="0" min="0"></td>
+                    <td><input type="number" id="attack-final" class="stat-input" aria-label="Final Attack" value="0" min="0"></td>
+                    <th id="attack-total">0</th>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th><label for="crit-damage">Crit Damage:</label></th>
+                    <td><input type="number" id="crit-damage" class="damage-input" value="0" min="0" step="0.01"></td>
+                </tr>
+                <tr>
+                    <th><label for="damage">Damage:</label></th>
+                    <td><input type="number" id="damage" class="damage-input" value="0" min="0" step="0.01"></td>
+                </tr>
+                <tr>
+                    <th><label for="status-damage">Status Damage:</label></th>
+                    <td><input type="number" id="status-damage" class="damage-input" value="0" min="0" step="0.01"></td>
+                </tr>
+                <tr>
+                    <th><label for="boss-damage">Boss Damage:</label></th>
+                    <td><input type="number" id="boss-damage" class="damage-input" value="0" min="0" step="0.01"></td>
+                </tr>
+            </table>
+            <div id="ied" class="no-bottom-margin">
+                <span class="label">IED:</span>
+                <span template="ied-item"></span>
+                <button type="button" aria-label="Add IED" onclick="addIedItem(event)">+</button>
+            </div>
+            <div class="no-bottom-margin">
+                <span class="label">Total IED:</span>
+                <span id="ied-total">0</span>%
+            </div>
+        </fieldset>
+
+        <fieldset id="familiars">
+            <legend>Familiars</legend>
+            <h3 class="no-top-margin no-bottom-margin">Stat</h3>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Base</th>
+                    <th>Percent</th>
+                </tr>
+                <tr>
+                    <th class="inner-main">Main</th>
+                    <td><input type="number" id="familiar-stat-1-base" class="stat-input aria-label-base-main" aria-label="Base Main Stat" value="0" min="0"></td>
+                    <td><input type="number" id="familiar-stat-1-percent" class="stat-input aria-label-percent-main" aria-label="Percent Main Stat" value="0" min="0"></td>
+                </tr>
+                <tr>
+                    <th class="inner-secondary">Secondary</th>
+                    <td><input type="number" id="familiar-stat-2-base" class="stat-input aria-label-base-secondary" aria-label="Base Secondary Stat" value="0" min="0"></td>
+                    <td><input type="number" id="familiar-stat-2-percent" class="stat-input aria-label-percent-secondary" aria-label="Percent Secondary Stat" value="0" min="0"></td>
+                </tr>
+                <tr id="familiar-stat-3">
+                    <th class="inner-third">Third</th>
+                    <td><input type="number" id="familiar-stat-3-base" class="stat-input aria-label-base-third" aria-label="Base Third Stat" value="0" min="0" disabled></td>
+                    <td><input type="number" id="familiar-stat-3-percent" class="stat-input aria-label-percent-third" aria-label="Percent Third Stat" value="0" min="0" disabled></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Base</th>
+                    <th>Percent</th>
+                </tr>
+                <tr>
+                    <th>Attack</th>
+                    <td><input type="number" id="familiar-attack-base" class="stat-input" aria-label="Base Attack" value="0" min="0"></td>
+                    <td><input type="number" id="familiar-attack-percent" class="stat-input" aria-label="Percent Attack" value="0" min="0"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <th><label for="familiar-crit-damage">Crit Damage:</label></th>
+                    <td><input type="number" id="familiar-crit-damage" class="damage-input" value="0" min="0"></td>
+                </tr>
+                <tr>
+                    <th><label for="familiar-damage">Damage:</label></th>
+                    <td><input type="number" id="familiar-damage" class="damage-input" value="0" min="0"></td>
+                </tr>
+                <tr>
+                    <th><label for="familiar-boss-damage">Boss Damage:</label></th>
+                    <td><input type="number" id="familiar-boss-damage" class="damage-input" value="0" min="0"></td>
+                </tr>
+            </table>
+            <div id="familiar-ied" class="no-bottom-margin">
+                <span class="label">IED:</span>
+                <span class="inline-item">
+                    <input type="number" class="damage-input" aria-label="IED Item" value="0" min="0" max="100">
+                    <button type="button" aria-label="Delete IED" onclick="deleteParent(event)">X</button>
+                </span>
+                <button type="button" aria-label="Add IED" onclick="addIedItem(event)">+</button>
+            </div>
+        </fieldset>
+
+        <fieldset id="buffs">
+            <legend>Links & Buffs / Debuffs</legend>
+            <div>
+                <span class="inline-item">
+                    <label for="mage"><img src="./img/mage.png" title="Mage Link" aria-label="Mage Link"></label>
+                    <input type="number" id="mage" class="digit-input" value="6" min="0" max="6">
+                </span>
+                <span class="inline-item">
+                    <label for="cadena"><img src="./img/cadena.png" title="Cadena Link" aria-label="Cadena Link"></label>
+                    <input type="number" id="cadena" class="digit-input" value="2" min="0" max="2">
+                </span>
+                <span class="inline-item">
+                    <label for="illium"><img src="./img/illium.png" title="Illium Link" aria-label="Illium Link"></label>
+                    <input type="number" id="illium" class="digit-input" value="2" min="0" max="2">
+                </span>
+                <span class="inline-item">
+                    <label for="ark"><img src="./img/ark.png" title="Ark Link" aria-label="Ark Link"></label>
+                    <input type="number" id="ark" class="digit-input" value="3" min="0" max="3">
+                </span>
+                <span class="inline-item">
+                    <label for="adele"><img src="./img/adele.png" title="Adele Link" aria-label="Adele Link"></label>
+                    <input type="number" id="adele" class="digit-input" value="0" min="0" max="2">
+                </span>
+            </div>
+            <div>
+                <span class="inline-item">
+                    <img src="./img/mapleWarrior.png" title="Maple Warrior" aria-label="Maple Warrior">
+                    <input type="radio" id="maple-warrior-15" name="mapleWarrior" checked>
+                    <label for="maple-warrior-15">15%</label>
+                    <input type="radio" id="maple-warrior-16" name="mapleWarrior">
+                    <label for="maple-warrior-16">16%</label>
+                </span>
+                <span class="inline-item">
+                    <label for="echo"><img src="./img/echo.png" title="Hero's Echo" aria-label="Hero's Echo"></label>
+                    <input type="checkbox" id="echo" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="sharp-eyes"><img src="./img/sharpEyes.png" title="Decent Sharp Eyes" aria-label="Decent Sharp Eyes"></label>
+                    <input type="checkbox" id="sharp-eyes" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="advanced-blessing"><img src="./img/advancedBlessing.png" title="Decent Advanced Blessing" aria-label="Decent Advanced Blessing"></label>
+                    <input type="checkbox" id="advanced-blessing">
+                </span>
+            </div>
+            <div>
+                <span class="inline-item">
+                    <label for="guild-boss"><img src="./img/guildBoss.png" title="Boss Slayers (Guild Boss)" aria-label="Boss Slayers (Guild Boss)"></label>
+                    <input type="number" id="guild-boss" class="digit-input" value="15" min="0" max="15">
+                </span>
+                <span class="inline-item">
+                    <label for="guild-ied"><img src="./img/guildIed.png" title="Undeterred (Guild IED)" aria-label="Undeterred (Guild IED)"></label>
+                    <input type="number" id="guild-ied" class="digit-input" value="0" min="0" max="15">
+                </span>
+                <span class="inline-item">
+                    <label for="guild-damage"><img src="./img/guildDamage.png" title="For the Guild! (Guild Damage)" aria-label="For the Guild! (Guild Damage)"></label>
+                    <input type="number" id="guild-damage" class="digit-input" value="15" min="0" max="15">
+                </span>
+                <span class="inline-item">
+                    <label for="guild-crit"><img src="./img/guildCrit.png" title="Hard Hitter (Guild Crit Damage)" aria-label="Hard Hitter (Guild Crit Damage)"></label>
+                    <input type="number" id="guild-crit" class="digit-input" value="15" min="0" max="15">
+                </span>
+            </div>
+            <div>
+                <span class="inline-item">
+                    <label for="monster-park">
+                        <img src="./img/monsterParkRed.png" title="Extreme Red Potion (Monster Park)" aria-label="Extreme Red Potion (Monster Park)">
+                        <img src="./img/monsterParkBlue.png" title="Extreme Blue Potion (Monster Park)" aria-label="Extreme Blue Potion (Monster Park)">
+                    </label>
+                    <input type="checkbox" id="monster-park" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="guild-buff"><img src="./img/guildBuff.png" title="Blessing of the Guild" aria-label="Blessing of the Guild"></label>
+                    <select id="guild-buff">
+                        <option value="0">None</option>
+                        <option value="20">Normal</option>
+                        <option value="30" selected>Greater</option>
+                    </select>
+                </span>
+                <span class="inline-item">
+                    <label for="ursus"><img src="./img/ursus.png" title="Masarayu's Gift Atmospheric Effect (Ursus)" aria-label="Masarayu's Gift Atmospheric Effect (Ursus)"></label>
+                    <input type="checkbox" id="ursus" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="legion"><img src="./img/legion.png" title="Legion's Might" aria-label="Legion's Might"></label>
+                    <input type="checkbox" id="legion" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="stat-pill">
+                        <img src="./img/statPotion.png" title="Advanced Stat Potion X" aria-label="Advanced Stat Potion X">
+                        <img src="./img/statPill.png" title="Advanced Stat Pill X" aria-label="Advanced Stat Pill X">
+                    </label>
+                    <input type="checkbox" id="stat-pill" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="smithing"><img src="./img/smithing.png" title="Advanced Weapon Tempering (Smithing)" aria-label="Advanced Weapon Tempering (Smithing)"></label>
+                    <input type="checkbox" id="smithing" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="adv-boss-rush">
+                        <img src="./img/advBossRush.png" title="Advanced Boss Rush Boost Potion" aria-label="Advanced Boss Rush Boost Potion">
+                        <img src="./img/sparklingRed.png" title="Sparkling Red Star Potion" aria-label="Sparkling Red Star Potion">
+                    </label>
+                    <input type="checkbox" id="adv-boss-rush" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="candied-apple"><img src="./img/candiedApple.png" title="Candied Apple" aria-label="Candied Apple"></label>
+                    <input type="checkbox" id="candied-apple" checked>
+                </span>
+            </div>
+            <div>
+                <span class="inline-item">
+                    <label for="tengu"><img src="./img/tengu.png" title="Tengu's Judgement" aria-label="Tengu's Judgement"></label>
+                    <input type="checkbox" id="tengu" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="fame"><img src="./img/fame.png" title="Fame Blessing" aria-label="Fame Blessing"></label>
+                    <select id="fame">
+                        <option value="0" selected>None</option>
+                        <option value="40">250</option>
+                        <option value="50">275</option>
+                        <option value="60">300</option>
+                    </select>
+                </span>
+                <span class="inline-item">
+                    <label for="home"><img src="./img/home.png" title="Caretaker's Support - Boss Attack Power (Home)" aria-label="Caretaker's Support - Boss Attack Power (Home)"></label>
+                    <input type="number" id="home" class="digit-input" value="0" min="0" max="6">
+                </span>
+            </div>
+            <h3>Custom Buffs</h3>
+            <div id="custom-buffs" class="no-bottom-margin">
+                <div template="custom-buff"></div>
+                <button type="button" class="no-bottom-margin" aria-label="Add Buff" onclick="addBuff(event)">+ Add Buff</button>
+            </div>
+        </fieldset>
+
+        <fieldset id="burst">
+            <legend>Burst Buffs / Debuffs + Partial Uptime</legend>
+            <div>
+                <span class="inline-item">
+                    <label for="thief"><img src="./img/thief.png" title="Thief Link" aria-label="Thief Link"></label>
+                    <input type="number" id="thief" class="digit-input" value="6" min="0" max="6">
+                </span>
+                <span class="inline-item">
+                    <label for="ab"><img src="./img/ab.png" title="Angelic Buster Link" aria-label="Angelic Buster Link"></label>
+                    <input type="number" id="ab" class="digit-input" value="3" min="0" max="3">
+                </span>
+                <span class="inline-item">
+                    <label for="kain"><img src="./img/kain.png" title="Kain Link" aria-label="Kain Link"></label>
+                    <input type="number" id="kain" class="digit-input" value="0" min="0" max="2">
+                </span>
+            </div>
+            <div>
+                <span class="inline-item">
+                    <input type="checkbox" id="use-oz-ring" checked>
+                    <label for="use-oz-ring">Use Oz Ring</label>
+                </span>
+                <span class="inline-item">
+                    <label for="ror">
+                        <img src="./img/ror.png" title="Ring of Restraint" aria-label="Ring of Restraint">
+                    </label>
+                    <input type="radio" id="ror" name="oz-ring" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="wj">
+                        <img src="./img/wj.png" title="Weapon Jump Ring" aria-label="Weapon Jump Ring">
+                    </label>
+                    <input type="radio" id="wj" name="oz-ring" checked>
+                </span>
+                <span class="inline-item">
+                    <label for="cont">
+                        <img src="./img/cont.png" title="Continuous Ring" aria-label="Continuous Ring">
+                    </label>
+                    <input type="radio" id="cont" name="oz-ring">
+                </span>
+                <span class="inline-item">
+                    <label for="oz-ring-level">Ring Level</label>
+                    <input type="number" id="oz-ring-level" class="digit-input" value="4" min="0" max="5">
+                </span>
+                <span class="inline-item">
+                    <label for="weapon-attack">Weapon's Attack</label>
+                    <input type="number" id="weapon-attack" class="damage-input" value="0" min="0">
+                </span>
+            </div>
+            <div>
+                <span class="inline-item">
+                    <input type="checkbox" id="modify-off-burst" checked>
+                    <label for="modify-off-burst">
+                        Partially include
+                        <img src="./img/thief.png" title="Thief Link" aria-label="Thief Link">
+                        and
+                        <img src="./img/cont.png" title="Continuous Ring" aria-label="Continuous Ring">
+                        in off-burst calculations (based on duration and cooldown)
+                    </label>
+                </span>
+            </div>
+            <h3>Custom Buffs</h3>
+            <div id="custom-burst" class="no-bottom-margin">
+                <div template="custom-buff"></div>
+                <button type="button" class="no-bottom-margin" aria-label="Add Buff" onclick="addBuff(event)">+ Add Buff</button>
+            </div>
+        </fieldset>
+
+        <fieldset id="skills">
+            <legend>Skills</legend>
+            <button type="button" class="no-bottom-margin" aria-label="Add Skill" onclick="addSkill(event)">+ Add Skill</button>
+        </fieldset>
+
+        <div class="flex">
+            <fieldset id="gains">
+                <legend>Comparision: Gains</legend>
+                <div template="buff-item"></div>
+                <button type="button" aria-label="Add Stat Gain" onclick="addStatBoost(event)">+ Stat Gain</button>
+            </fieldset>
+            <fieldset id="losses">
+                <legend>Comparison: Losses</legend>
+                <div template="buff-item"></div>
+                <button type="button" aria-label="Add Stat Loss" onclick="addStatBoost(event)">+ Stat Loss</button>
+            </fieldset>
+        </div>
+    </form>
+
+    <table id="results">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Off-Burst</th>
+                <th>Burst</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Stat Totals</th>
+                <td id="result-stats">
+                    <div class="no-bottom-margin">
+                        <span class="label">Base <span class="inner-main">Main Stat</span>:</span>
+                        <span id="result-stat-1-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Percent <span class="inner-main">Main Stat</span>:</span>
+                        <span id="result-stat-1-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final <span class="inner-main">Main Stat</span>:</span>
+                        <span id="result-stat-1-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Base <span class="inner-secondary">Secondary Stat</span>:</span>
+                        <span id="result-stat-2-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Percent <span class="inner-secondary">Secondary Stat</span>:</span>
+                        <span id="result-stat-2-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final <span class="inner-secondary">Secondary Stat</span>:</span>
+                        <span id="result-stat-2-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Base <span class="inner-third">Third Stat</span>:</span>
+                        <span id="result-stat-3-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Percent <span class="inner-third">Third Stat</span>:</span>
+                        <span id="result-stat-3-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final <span class="inner-third">Third Stat</span>:</span>
+                        <span id="result-stat-3-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Base Attack:</span>
+                        <span id="result-attack-base"></span>
+                    </div>
+                    <div>
+                        <span class="label">Percent Attack:</span>
+                        <span id="result-attack-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final Attack:</span>
+                        <span id="result-attack-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Crit Damage:</span>
+                        <span id="result-crit-damage"></span>%
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Damage:</span>
+                        <span id="result-damage"></span>%
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Boss Damage:</span>
+                        <span id="result-boss-damage"></span>%
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">IED:</span>
+                        <span id="result-ied"></span>%
+                    </div>
+                </td>
+                <td id="result-burst">
+                    <div class="no-bottom-margin">
+                        <span class="label">Base <span class="inner-main">Main Stat</span>:</span>
+                        <span id="result-burst-stat-1-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Percent <span class="inner-main">Main Stat</span>:</span>
+                        <span id="result-burst-stat-1-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final <span class="inner-main">Main Stat</span>:</span>
+                        <span id="result-burst-stat-1-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Base <span class="inner-secondary">Secondary Stat</span>:</span>
+                        <span id="result-burst-stat-2-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Percent <span class="inner-secondary">Secondary Stat</span>:</span>
+                        <span id="result-burst-stat-2-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final <span class="inner-secondary">Secondary Stat</span>:</span>
+                        <span id="result-burst-stat-2-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Base <span class="inner-third">Third Stat</span>:</span>
+                        <span id="result-burst-stat-3-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Percent <span class="inner-third">Third Stat</span>:</span>
+                        <span id="result-burst-stat-3-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final <span class="inner-third">Third Stat</span>:</span>
+                        <span id="result-burst-stat-3-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Base Attack:</span>
+                        <span id="result-burst-attack-base"></span>
+                    </div>
+                    <div>
+                        <span class="label">Percent Attack:</span>
+                        <span id="result-burst-attack-percent"></span>%
+                    </div>
+                    <div>
+                        <span class="label">Final Attack:</span>
+                        <span id="result-burst-attack-final"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Crit Damage:</span>
+                        <span id="result-burst-crit-damage"></span>%
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Damage:</span>
+                        <span id="result-burst-damage"></span>%
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">Boss Damage:</span>
+                        <span id="result-burst-boss-damage"></span>%
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">IED:</span>
+                        <span id="result-burst-ied"></span>%
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Stat Equivalencies</th>
+                <td id="equivalencies">
+                    <div class="no-bottom-margin">
+                        <span class="label">1% <span class="inner-main">Main Stat</span> =</span>
+                        <span id="equivalencies-stat-1-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% <span class="inner-secondary">Second Stat</span> =</span>
+                        <span id="equivalencies-stat-2-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% <span class="inner-third">Third Stat</span> =</span>
+                        <span id="equivalencies-stat-3-percent"></span>
+                    </div>
+                    <div>
+                        <span class="label">1% All Stat =</span>
+                        <span id="equivalencies-stat-all-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">
+                            1 <span class="inner-main">Main Stat</span> =
+                        </span>
+                        1
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">
+                            <span id="equivalencies-stat-2-base"></span>
+                            <span class="inner-secondary">Secondary Stat</span> =
+                        </span>
+                        1
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">
+                            <span id="equivalencies-stat-3-base"></span>
+                            <span class="inner-third">Secondary Stat</span> =
+                        </span>
+                        1
+                    </div>
+                    <div>
+                        <span class="label">1 Base Attack =</span>
+                        <span id="equivalencies-attack-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% Attack =</span>
+                        <span id="equivalencies-attack-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% Damage =</span>
+                        <span id="equivalencies-damage"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% Crit Damage =</span>
+                        <span id="equivalencies-crit-damage"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% IED =</span>
+                        <span id="equivalencies-ied"></span>
+                    </div>
+                </td>
+                <td id="burst-equivalencies">
+                    <div class="no-bottom-margin">
+                        <span class="label">1% <span class="inner-main">Main Stat</span> =</span>
+                        <span id="burst-equivalencies-stat-1-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% <span class="inner-secondary">Second Stat</span> =</span>
+                        <span id="burst-equivalencies-stat-2-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% <span class="inner-third">Third Stat</span> =</span>
+                        <span id="burst-equivalencies-stat-3-percent"></span>
+                    </div>
+                    <div>
+                        <span class="label">1% All Stat =</span>
+                        <span id="burst-equivalencies-stat-all-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">
+                            1 <span class="inner-main">Main Stat</span> =
+                        </span>
+                        1
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">
+                            <span id="burst-equivalencies-stat-2-base"></span>
+                            <span class="inner-secondary">Secondary Stat</span> =
+                        </span>
+                        1
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">
+                            <span id="burst-equivalencies-stat-3-base"></span>
+                            <span class="inner-third">Secondary Stat</span> =
+                        </span>
+                        1
+                    </div>
+                    <div>
+                        <span class="label">1 Base Attack =</span>
+                        <span id="burst-equivalencies-attack-base"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% Attack =</span>
+                        <span id="burst-equivalencies-attack-percent"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% Damage =</span>
+                        <span id="burst-equivalencies-damage"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% Crit Damage =</span>
+                        <span id="burst-equivalencies-crit-damage"></span>
+                    </div>
+                    <div class="no-bottom-margin">
+                        <span class="label">1% IED =</span>
+                        <span id="burst-equivalencies-ied"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Optimization Score</th>
+                <td id="score" class="label"></td>
+                <td id="score-burst" class="label"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div id="templates" hidden>
+        <div id="ied-item">
+            <span class="inline-item">
+                <input type="number" class="damage-input" aria-label="IED" value="0" min="0" max="100" step="0.01">
+                <button type="button" aria-label="Delete IED" onclick="deleteParent(event)">X</button>
+            </span>
+        </div>
+        <div id="custom-buff">
+            <div class="custom-buff">
+                <span class="custom-buff-contents inline-item">
+                    <span class="inline-item">
+                        <label>Enabled: <input type="checkbox" class="active-input" checked></label>
+                    </span>
+                    <span class="inline-item">
+                        <label>Name: <input type="text" class="name-input"></label>
+                    </span>
+                    <span class="inline-item buff-items">
+                        <div template="buff-item"></div>
+                        <button type="button" aria-label="Add Stat Boost" onclick="addStatBoost(event)">+ Stat Boost</button>
+                    </span>
+                </span>
+                <button type="button" aria-label="Delete Buff" onclick="deleteParent(event)">X</button>
+            </div>
+        </div>
+        <div id="buff-item">
+            <div class="buff-item">
+                <span class="inline-item">
+                    <select aria-label="Stat Type">
+                        <option template="feature-options"></option>
+                    </select>
+                </span>
+                <span class="inline-item">
+                    <label>Value: <input type="number" class="damage-input"></label>
+                </span>
+                <button type="button" aria-label="Delete Stat Boost" onclick="deleteParent(event)">X</button>
+            </div>
+        </div>
+        <div id="skill">
+            <div class="skill">
+                <span class="skill-contents inline-item">
+                    <span class="inline-item">
+                        <label>Name: <input type="text" class="name-input"></label>
+                    </span>
+                    <span class="inline-item">
+                        <label>Burst-Only: <input type="checkbox" class="burst-input"></label>
+                    </span>
+                    <span class="inline-item buff-items">
+                        <div template="buff-item"></div>
+                        <button type="button" aria-label="Add Stat Boost" onclick="addStatBoost(event)">+ Stat Boost</button>
+                    </span>
+                </span>
+                <button type="button" aria-label="Delete Skill" onclick="deleteParent(event)">X</button>
+            </div>
+        </div>
+    </div>
+</body>
