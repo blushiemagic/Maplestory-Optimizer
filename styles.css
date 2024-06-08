@@ -132,3 +132,12 @@ td:first-child, th:first-child {
 .loss {
     color: #800000;
 }
+
+footer {
+    margin-top: 3em;
+    font-size: 0.8em;
+}
+
+footer>div {
+    margin-bottom: 0.25em;
+}
