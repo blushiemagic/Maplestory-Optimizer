@@ -706,8 +706,7 @@ function tallyFeatures() {
     if (data.buffs.ark > 0) {
         featureSet.damage += 1 + 5 * data.buffs.ark;
     }
-    featureSet.bossDamage += 2 * data.buffs.adele;
-    featureSet.damage += 4 * data.buffs.adele;
+    featureSet.damage += 3 * data.buffs.adele;
 
     featureSet.percentApStat.push(data.buffs.mapleWarrior ? 16 : 15);
     if (data.buffs.sharpEyes) {
