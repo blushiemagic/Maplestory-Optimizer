@@ -949,6 +949,11 @@ function calculateEquivalencies(resultType, featureTotals) {
     element.parentElement.parentElement.hidden = !usingThirdStat;
 
     test = cloneFeatureSet(featureTotals);
+    test.finalMainStat += 1;
+    equivalency = parseFloat((normalize / (calculateScore(test) - base)).toFixed(2));
+    document.getElementById(resultType + 'equivalencies-stat-1-final').innerHTML = equivalency;
+
+    test = cloneFeatureSet(featureTotals);
     test.baseAttack += 1;
     document.getElementById(resultType + 'equivalencies-attack-base').innerHTML = getEquivalency(test);
 
