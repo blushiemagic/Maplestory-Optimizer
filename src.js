@@ -2,7 +2,7 @@
 
 const features = Object.freeze({
     apMainStat: {
-        name: 'AP',
+        name: 'AP (Basic)',
         category: '-main',
         dynamicName: true,
         include: [ 'base' ]
@@ -25,7 +25,7 @@ const features = Object.freeze({
     },
 
     apSecondaryStat: {
-        name: 'AP',
+        name: 'AP (Basic)',
         category: '-secondary',
         dynamicName: true,
         include: [ 'base' ]
@@ -48,7 +48,7 @@ const features = Object.freeze({
     },
 
     apThirdStat: {
-        name: 'AP',
+        name: 'AP (Basic)',
         category: '-third',
         dynamicName: true,
         include: [ 'base' ]
@@ -71,7 +71,7 @@ const features = Object.freeze({
     },
 
     percentApStat: {
-        name: 'Percent AP Stats',
+        name: 'Percent AP (Basic) Stats',
         category: 'All Stats / Attack',
         include: [ 'custom' ],
         isList: true
@@ -1095,7 +1095,7 @@ function replaceTextInHtml() {
             container.innerHTML = text;
         }
         for (let label of document.querySelectorAll('.aria-label-ap-' + type)) {
-            label.ariaLabel = 'AP ' + text;
+            label.ariaLabel = 'AP (Basic) ' + text;
         }
         for (let label of document.querySelectorAll('.aria-label-base-' + type)) {
             label.ariaLabel = 'Base ' + text;
