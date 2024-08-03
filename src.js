@@ -989,7 +989,11 @@ function calculateScore(featureTotals) {
         stats[k] += featureTotals['final' + statTypes[k]];
     }
     let statScore;
-    if (data.class == 'xenon') {
+    if (data.class == 'da') {
+        //statScore = Math.floor(featureTotals['apMainStat'] / 3.5)
+        //    + 0.8 * Math.floor((stats[0] - featureTotals['apMainStat']) / 3.5) + stats[1];
+        statScore = featureTotals['apMainStat'] / 3.5 + 0.8 * (stats[0] - featureTotals['apMainStat']) / 3.5 + stats[1];
+    } else if (data.class == 'xenon') {
         statScore = 4 * (stats[0] + stats[1] + stats[2]);
     } else {
         statScore = 4 * stats[0] + stats[1];
