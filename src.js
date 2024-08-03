@@ -1098,6 +1098,9 @@ function replaceTextInHtml() {
         for (let container of document.querySelectorAll('.inner-' + type)) {
             container.innerHTML = text;
         }
+        for (let container of document.querySelectorAll('.label-' + type)) {
+            container.label = text;
+        }
         for (let label of document.querySelectorAll('.aria-label-ap-' + type)) {
             label.ariaLabel = 'AP (Basic) ' + text;
         }
@@ -1131,6 +1134,7 @@ function insertTemplate(parent, templateId, child) {
         }
         for (let category in categories) {
             let optgroup = document.createElement('optgroup');
+            console.log(data);
             optgroup.label = replaceText(category, data.class);
             if (category.startsWith('-')) {
                 optgroup.classList.add('label' + category);
