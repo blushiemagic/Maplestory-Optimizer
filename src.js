@@ -147,8 +147,6 @@ const classes = {
     }
 };
 
-const bossDefense = 380;
-
 function createData() {
     return {
         class: 'str',
@@ -1007,7 +1005,7 @@ function calculateScore(featureTotals) {
     attackScore += featureTotals.finalAttack;
     let critDamageScore = 135 + featureTotals.critDamage;
     let damageScore = 100 + featureTotals.damage + featureTotals.bossDamage;
-    let iedScore = 10000 - bossDefense * (100 - calculateIedFromList(featureTotals.ied));
+    let iedScore = 10000 - getNumberValue('defense') * (100 - calculateIedFromList(featureTotals.ied));
 
     let totalScore = statScore * attackScore / 100 * critDamageScore / 100 * damageScore / 100 * iedScore / 10000;
     return Math.max(totalScore, 1);
@@ -1185,6 +1183,11 @@ function addSkill(event) {
 
 function deleteParent(event) {
     event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+    calculate();
+}
+
+function setDefense(defense) {
+    document.getElementById('defense').valueAsNumber = defense;
     calculate();
 }
 
